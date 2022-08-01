@@ -16,3 +16,24 @@ build/
 filtered-applications.txt
 filtered-users.txt
 *.csv
+
+# Frontend
+
+# Ignore docs files
+/_site/
+# Hugo files
+/resources/
+/.hugo_build.lock
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+*.zip
+*~
+
