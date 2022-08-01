@@ -37,3 +37,4 @@ filtered-users.txt
 *.zip
 *~
 
+.DS_Store
