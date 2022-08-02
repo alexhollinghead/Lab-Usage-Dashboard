@@ -9,6 +9,6 @@ def index():
 def data():
     return methods.dataframe().to_json(), {'Content-Type': 'application/json'}
 
-@app.route('/usage/<data_type>')
+@app.route('/usage/<data_type>', methods=['GET'])
 def usage(data_type):
     return methods.usage(data_type)
