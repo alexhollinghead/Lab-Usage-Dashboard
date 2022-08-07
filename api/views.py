@@ -1,4 +1,4 @@
-from api import app
+from flask import current_app as app
 from api import methods
 
 @app.route('/')

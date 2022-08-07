@@ -1,7 +1,6 @@
 import pandas as pd
-from flask_sqlalchemy import SQLAlchemy
-from api import app
-from sqlalchemy.types import Integer, Text, String, DateTime
+# from flask_sqlalchemy import SQLAlchemy
+# from sqlalchemy.types import Integer, Text, String, DateTime
 
 def dataframe():    
     '''
