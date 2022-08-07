@@ -1,5 +1,4 @@
 import pandas as pd
-from api import dbconfig
 
 def dataframe():    
     '''
