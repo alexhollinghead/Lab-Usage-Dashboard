@@ -1,25 +1,36 @@
 import pandas as pd
+from . import dbconfig
 
 def dataframe():    
     '''
     Constructs a dataframe, cleans data, and returns as JSON
-    '''
-    lab_usage = pd.read_csv('spring-app-usage.csv', sep=r'\s*,\s*', engine='python', index_col=False)
-    dataset = clean(lab_usage)
-    # df = dataset.to_json()
-    return dataset
+    ''' 
+    pass
 
-def clean(dataset):
-    '''
-    Performs specified data cleaning operatings on dataset taken as parameter.
-    '''
+def upload(data_source):
+    '''Take a csv file and add its contents to the database. If a db table does not exist yet, creates the database.'''
+    # Build dataframe from CSV file
+    dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python', index_col=False)
+
+    # Reformat data and column headers.
     dataset['Launched Date'] = dataset['Launched Date'].map(str) + ' ' + dataset['Time'].map(str)
-    dataset = dataset.loc[dataset['Front most in seconds'] > 61]
     dataset = dataset.drop(['Time', 'State', 'Total Run time', 'Front most'], axis = 1)
     dataset['Launched Date'] = pd.to_datetime(dataset['Launched Date'])
 
+    # Drop apps open for under a minute
+    dataset = dataset.loc[dataset['Front most in seconds'] > 61]
+
     # Reanme columns
     dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'launched_date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
+
+    # Create database table
+    dbconfig.create_table(dataset)
+
+    return 'Success'
+
+def usage(data_type):
+    '''Returns a snapshot of lab usage'''
+    dataset = dataframe()
 
     # Create filters based on lists of users and applications
     file = open('filtered-users.txt')
@@ -32,11 +43,6 @@ def clean(dataset):
     dataset = dataset[~dataset['process'].isin(app_filter)]
     dataset.dropna()
 
-    return dataset
-    
-def usage(data_type):
-    '''Returns a snapshot of lab usage'''
-    dataset = dataframe()
     if data_type == 'apps':
         app_frequency = dataset['process'].value_counts()
         data_view = app_frequency.to_json(), {'Content-Type' : 'application/json'}
@@ -51,8 +57,3 @@ def usage(data_type):
         data_view = machine_sessions.to_json(), {'Content-Type' : 'application/json'}
   
     return data_view
-
-def upload():
-    # Create DB table
-    # dbconfig.create_table(dataset)
-    pass

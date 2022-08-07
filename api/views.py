@@ -5,6 +5,10 @@ from api import methods
 def index():
     return "Hello world!"
 
+@app.route('/upload/<data_source>')
+def upload(data_source):
+    return methods.upload(data_source)
+
 @app.route('/dataframe')
 def data():
     return methods.dataframe().to_json(), {'Content-Type': 'application/json'}

@@ -1,7 +1,6 @@
 from os import environ
 from sqlalchemy import create_engine
 from sqlalchemy.types import Integer, Text, String, DateTime
-from . import db
 import os.path
 
 # db_uri = environ.get('SQLALCHEMY_DATABASE_URI')
