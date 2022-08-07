@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy, create_engine
 from sqlalchemy.types import Integer, Text, String, DateTime
 
+
 db_uri = ''
 
 self.engine = create_engine(db_uri, echo=True)

@@ -3,10 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from api import app
 from sqlalchemy.types import Integer, Text, String, DateTime
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #to supress warning
-db = SQLAlchemy(app) #database instance
-
 def dataframe():    
     '''
     Constructs a dataframe, cleans data, and returns as JSON

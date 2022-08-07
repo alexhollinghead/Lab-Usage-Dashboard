@@ -39,3 +39,4 @@ filtered-users.txt
 
 .DS_Store
 api/config.py
+*.db
