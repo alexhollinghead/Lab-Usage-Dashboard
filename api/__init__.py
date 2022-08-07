@@ -11,6 +11,8 @@ def init_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_pyfile('../config.py')
 
+    db.init_app(app)
+
     # Create app database if it does not exist already
     if os.path.exists('databse.db') == False:
         try:
