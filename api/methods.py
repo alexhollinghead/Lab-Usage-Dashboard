@@ -1,12 +1,13 @@
 import pandas as pd
 from . import dbconfig
-from datetime import date
+from datetime import datetime, date
 
-def dataframe(start_date = date.datetime(1970, 1, 1), end_date = date.now()):    
+def dataframe(start_date = datetime(1970, 1, 1), end_date = datetime.now()):    
     '''
     Builds a dataframe from date parameters
     ''' 
-    pass
+    dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
+    return dataset
 
 def upload(data_source):
     '''Take a csv file and add its contents to the database. If a db table does not exist yet, creates the database.'''
@@ -48,8 +49,7 @@ def app_filter(app_file):
 
 def usage(data_type):
     '''Returns a snapshot of lab usage'''
-    dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
-
+    dataset = dataframe()
     # Create filters based on lists of users and applications
     file = open('filtered-users.txt')
     user_filter = [line.rstrip() for line in file.readlines()]
