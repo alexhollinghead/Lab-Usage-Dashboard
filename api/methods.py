@@ -20,13 +20,17 @@ def upload(data_source):
     # Drop apps open for under a minute
     dataset = dataset.loc[dataset['Front most in seconds'] > 61]
 
-    # Reanme columns
+    # Rename columns
     dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'launched_date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
 
     # Create database table
-    dbconfig.create_table(dataset)
+    try:
+        dbconfig.put_data(dataset)
+        return 'Success!'
 
-    return 'Success'
+    except:
+        return "Error."
+    
 
 def usage(data_type):
     '''Returns a snapshot of lab usage'''
