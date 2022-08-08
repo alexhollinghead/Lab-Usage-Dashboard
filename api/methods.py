@@ -34,7 +34,7 @@ def upload(data_source):
 
 def usage(data_type):
     '''Returns a snapshot of lab usage'''
-    dataset = dataframe()
+    dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
 
     # Create filters based on lists of users and applications
     file = open('filtered-users.txt')
