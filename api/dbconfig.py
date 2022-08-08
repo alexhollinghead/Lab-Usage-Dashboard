@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.types import Integer, Text, String, DateTime
-import os.path
+from sqlalchemy.types import Integer, Text, DateTime
 from config import BaseConfig
 
 database_uri = BaseConfig.SQLALCHEMY_DATABASE_URI
@@ -10,7 +9,7 @@ def put_data(usage_df):
     usage_df.to_sql(
         'usage',
         engine,
-        if_exists='replace',
+        if_exists='append',
         index=False,
         dtype={
             "computer": Text,
@@ -19,5 +18,16 @@ def put_data(usage_df):
             "frontmost_time": Integer,
             "user_name": Text,
             "total_runitme": Integer,
+        }
+    )
+
+def filter_add(filter, dataframe, label):
+    dataframe.to_sql(
+        filter,
+        engine,
+        if_exists='append',
+        index=False,
+        dtype={
+            label: Text,
         }
     )

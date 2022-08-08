@@ -1,9 +1,10 @@
 import pandas as pd
 from . import dbconfig
+from datetime import date
 
-def dataframe():    
+def dataframe(start_date = date.datetime(1970, 1, 1), end_date = date.now()):    
     '''
-    Constructs a dataframe, cleans data, and returns as JSON
+    Builds a dataframe from date parameters
     ''' 
     pass
 
@@ -31,6 +32,19 @@ def upload(data_source):
     except:
         return "Error."
     
+def user_filter(user_file):
+    file = open(user_file)
+    user_list = [line.rstrip() for line in file.readlines()]
+    users = pd.Series(user_list, name='user')
+    dbconfig.filter_add('user_filter', dataframe = users, label='users')
+    return 'Success!'
+
+def app_filter(app_file):
+    file = open(app_file)
+    app_list = [line.rstrip() for line in file.readlines()]
+    apps = pd.Series(app_list, name='app')
+    dbconfig.filter_add('app_filter', dataframe = apps, label='app')
+    return 'Success'
 
 def usage(data_type):
     '''Returns a snapshot of lab usage'''

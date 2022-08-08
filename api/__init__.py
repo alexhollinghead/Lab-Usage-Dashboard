@@ -14,12 +14,12 @@ def init_app():
     db.init_app(app)
 
     # Create app database if it does not exist already
-    if os.path.exists('databse.db') == False:
+    if not os.path.exists('databse.db'):
         try:
             conn = sqlite3.connect('database.db')
             print('Database formed')
-        except:
-            print('Database not formed')
+        except Exception as error:
+            return error
 
     with app.app_context():
         # Include routes
