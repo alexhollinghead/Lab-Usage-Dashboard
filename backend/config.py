@@ -1,7 +1,7 @@
 import os.path
 
 class BaseConfig:
-    FLASK_APP = 'wasgi.py'
+    FLASK_APP = 'wsgi.py'
     
     path = os.path.abspath(os.getcwd())
     db_uri = f'sqlite:////{path}/database.db'
@@ -15,7 +15,7 @@ class DevConfig(BaseConfig):
     # Flask configuration
     TESTING = True
     DEBUG = True
-    FLASK_ENV = 'development'
+    FLASK_DEBUG = True
 
 class ProdConfig(BaseConfig):
     pass

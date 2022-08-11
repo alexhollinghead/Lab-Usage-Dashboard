@@ -1,8 +1,8 @@
 import pandas as pd
 from . import dbconfig
-from datetime import datetime, date
+from datetime import datetime
 
-def dataframe(start_date = datetime(1970, 1, 1), end_date = datetime.now()):    
+def dataframe(start_date = datetime(2022, 1, 1), end_date = datetime.now()):    
     '''
     Builds a dataframe from date parameters
     ''' 
@@ -16,10 +16,10 @@ def upload(data_source):
 
     # Reformat data and column headers.
     dataset['Launched Date'] = dataset['Launched Date'].map(str) + ' ' + dataset['Time'].map(str)
-    dataset = dataset.drop(['Time', 'State', 'Total Run time', 'Front most'], axis = 1)
     dataset['Launched Date'] = pd.to_datetime(dataset['Launched Date'])
 
-    # Drop apps open for under a minute
+    # Drop apps open for under a minute and irrelevant columns
+    dataset = dataset.drop(['Time', 'State', 'Total Run time', 'Front most'], axis = 1)
     dataset = dataset.loc[dataset['Front most in seconds'] > 61]
 
     # Rename columns
@@ -34,6 +34,7 @@ def upload(data_source):
         return "Error."
     
 def user_filter(user_file):
+    '''Adds names from a .txt file to the filtered users table in the database.'''
     file = open(user_file)
     user_list = [line.rstrip() for line in file.readlines()]
     users = pd.Series(user_list, name='user')
@@ -41,6 +42,7 @@ def user_filter(user_file):
     return 'Success!'
 
 def app_filter(app_file):
+    '''Adds process names from a .txt file to the filtered apps table in the database.'''
     file = open(app_file)
     app_list = [line.rstrip() for line in file.readlines()]
     apps = pd.Series(app_list, name='app')
