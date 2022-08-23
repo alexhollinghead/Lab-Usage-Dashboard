@@ -52,16 +52,13 @@ def app_filter(app_file):
 def usage(data_type):
     '''Returns a snapshot of lab usage'''
     dataset = dataframe()
-    # Create filters based on lists of users and applications
-    file = open('filtered-users.txt')
-    user_filter = [line.rstrip() for line in file.readlines()]
-    file = open('filtered-applications.txt')
-    app_filter = [line.rstrip() for line in file.readlines()]
 
-    #Remove filtered data from the dataset
-    dataset = dataset[~dataset['user_name'].isin(user_filter)]
-    dataset = dataset[~dataset['process'].isin(app_filter)]
-    dataset.dropna()
+    # Create filters based on lists of users and applications
+    filtered_apps = pd.read_sql_table('app_filter', con = dbconfig.engine.connect())
+    filtered_users = pd.read_sql_table('user_filter', con = dbconfig.engine.connect())
+    dataset = dataset[~dataset.process.isin(filtered_apps.app)] 
+    dataset = dataset[~dataset.user_name.isin(filtered_users.user)]
+
 
     if data_type == 'apps':
         app_frequency = dataset['process'].value_counts()
