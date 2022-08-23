@@ -1,4 +1,5 @@
-from flask import current_app as app
+import re
+from flask import current_app as app, request
 from api import methods
 
 @app.route('/')
@@ -7,17 +8,17 @@ def index():
 
 # Upload routes
 
-@app.route('/upload/data/<data_source>')
-def upload(data_source):
-    return methods.upload(data_source)
+@app.route('/upload')
+def upload_data():
+    data_type = request.args['type']
+    file = request.args['file']
 
-@app.route('/upload/userfilter/<data_source>')
-def user_filter(data_source):
-    return methods.user_filter(data_source)
-
-@app.route('/upload/appfilter/<data_source>')
-def app_filter(data_source):
-    return methods.app_filter(data_source)
+    if data_type == 'userfilter':
+        return methods.upload_user_filter(file)
+    elif data_type == 'appfilter':
+        return methods.upload_app_filter(file)
+    elif data_type == 'usage':
+        return methods.upload_usage_data(file)
 
 # Dataframe view
 
@@ -27,6 +28,7 @@ def data():
 
 # Usage routes
 
-@app.route('/usage/<data_type>', methods=['GET'])
-def usage(data_type):
+@app.route('/usage', methods=['GET'])
+def usage():
+    data_type = request.args['type']
     return methods.usage(data_type)
