@@ -2,11 +2,13 @@ import pandas as pd
 from . import dbconfig
 from datetime import datetime
 
-def dataframe(start_date = datetime(2022, 1, 1), end_date = datetime.now()):    
+def dataframe(start_date = datetime(1970, 1, 1), end_date = datetime.now()):    
     '''
     Builds a dataframe from date parameters
     ''' 
+
     dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
+    dataset = dataset[(dataset['date'] >= start_date) & (dataset['date'] <= end_date)]
     return dataset
 
 def upload_usage_data(data_source):
@@ -23,7 +25,7 @@ def upload_usage_data(data_source):
     dataset = dataset.loc[dataset['Front most in seconds'] > 61]
 
     # Rename columns
-    dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'launched_date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
+    dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
 
     # Consolidate different versions of Adobe apps
     for i, row in dataset.iterrows():
@@ -47,8 +49,9 @@ def upload_user_filter(user_file):
     users = pd.Series(user_list, name='user')
     
     # Check for duplicates
-    existing_users = pd.read_sql_table('user_filter', con = dbconfig.engine.connect())
-    users = users[~users.isin(existing_users.user)]
+    if dbconfig.engine.has_table('user_filter'):
+        existing_users = pd.read_sql_table('user_filter', con = dbconfig.engine.connect())
+        users = users[~users.isin(existing_users.user)]
     
     # Put
     dbconfig.filter_add('user_filter', dataframe = users, label='users')
@@ -61,8 +64,9 @@ def upload_app_filter(app_file):
     apps = pd.Series(app_list, name='app')
 
     # Check for duplicates
-    existing_apps = pd.read_sql_table('app_filter', con = dbconfig.engine.connect())
-    apps = apps[~apps.isin(existing_apps.app)]
+    if dbconfig.engine.has_table('app_filter'):
+        existing_apps = pd.read_sql_table('app_filter', con = dbconfig.engine.connect())
+        apps = apps[~apps.isin(existing_apps.app)]
 
     # Put
     dbconfig.filter_add('app_filter', dataframe = apps, label='app')

@@ -14,7 +14,7 @@ def put_data(usage_df):
         dtype={
             "computer": Text,
             "process": Text,
-            "launched_date": DateTime,
+            "date": DateTime,
             "frontmost_time": Integer,
             "user_name": Text,
             "total_runitme": Integer,
