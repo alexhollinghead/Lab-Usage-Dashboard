@@ -22,7 +22,7 @@ def upload_data():
 # Dataframe view
 @app.route('/dataframe')
 def data():
-    return methods.dataframe().to_json(), {'Content-Type': 'application/json'}
+    return methods.set_dataframe() .to_json(), {'Content-Type': 'application/json'}
 
 # Usage routes
 @app.route('/usage', methods=['GET'])

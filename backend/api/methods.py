@@ -2,17 +2,24 @@ import pandas as pd
 from . import dbconfig
 from datetime import datetime
 
-def dataframe(start_date = datetime(1970, 1, 1), end_date = datetime.now()):    
-    '''
+def set_dataframe(start_date = datetime(2021, 1, 1), end_date = datetime.now()):    
+    """
     Builds a dataframe from date parameters
-    ''' 
-
+    """ 
     dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
+    # Filter with date parameters
     dataset = dataset[(dataset['date'] >= start_date) & (dataset['date'] <= end_date)]
+
+    # Consolidate apps used in a session
+    dataset['day'] = dataset['date'].dt.date
+    dataset = dataset.groupby(['computer','user_name','day'], as_index=False).agg({'process':lambda x:list(x)})
+
     return dataset
 
 def upload_usage_data(data_source):
-    '''Take a csv file and add its contents to the database. If a db table does not exist yet, creates the database.'''
+    """
+    Take a csv file and add its contents to the database. If a db table does not exist yet, create the database.
+    """
     # Build dataframe from CSV file
     dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python', index_col=False)
 
@@ -28,7 +35,7 @@ def upload_usage_data(data_source):
     dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
 
     # Consolidate different versions of Adobe apps
-    for i, row in dataset.iterrows():
+    for i in dataset.iterrows():
         app_name = dataset.loc[i, 'process']
         if app_name[:5] == "Adobe" and app_name[-4:].isnumeric():
             dataset.at[i, 'process'] = app_name[:-5]
@@ -37,13 +44,13 @@ def upload_usage_data(data_source):
     try:
         dbconfig.put_data(dataset)
         return 'Success!'
-
     except:
         return "Error."
     
 def upload_user_filter(user_file):
-    '''Adds names from a .txt file to the filtered users table in the database.'''
-    
+    """
+    Add names from a .txt file to the filtered users table in the database.
+    """
     file = open(user_file)
     user_list = [line.rstrip() for line in file.readlines()]
     users = pd.Series(user_list, name='user')
@@ -58,7 +65,9 @@ def upload_user_filter(user_file):
     return 'Success!'
 
 def upload_app_filter(app_file):
-    '''Adds process names from a .txt file to the filtered apps table in the database.'''
+    """
+    Adds process names from a .txt file to the filtered apps table in the database.
+    """
     file = open(app_file)
     app_list = [line.rstrip() for line in file.readlines()]
     apps = pd.Series(app_list, name='app')
@@ -73,8 +82,8 @@ def upload_app_filter(app_file):
     return 'Success'
 
 def usage(data_type):
-    '''Returns a snapshot of lab usage'''
-    dataset = dataframe()
+    """Returns a snapshot of lab usage"""
+    dataset = set_dataframe()
 
     # Create filters based on lists of users and applications
     filtered_apps = pd.read_sql_table('app_filter', con = dbconfig.engine.connect())
