@@ -8,11 +8,13 @@ def set_dataframe(start_date = datetime(2021, 1, 1), end_date = datetime.now()):
     """ 
     dataset = pd.read_sql_table('usage', con = dbconfig.engine.connect())
     # Filter with date parameters
-    dataset = dataset[(dataset['date'] >= start_date) & (dataset['date'] <= end_date)]
+    dataset = dataset[(dataset['date'] >= start_date) & \
+    (dataset['date'] <= end_date)]
 
     # Consolidate apps used in a session
     dataset['day'] = dataset['date'].dt.date
-    dataset = dataset.groupby(['computer','user_name','day'], as_index=False).agg({'process':lambda x:list(x)})
+    dataset = dataset.groupby(['computer','user_name','day'], \
+    as_index=False).agg({'process':lambda x:list(x)})
 
     return dataset
 
@@ -21,18 +23,23 @@ def upload_usage_data(data_source):
     Take a csv file and add its contents to the database. If a db table does not exist yet, create the database.
     """
     # Build dataframe from CSV file
-    dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python', index_col=False)
+    dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python', \
+    index_col=False)
 
     # Reformat data and column headers.
     dataset['Launched Date'] = dataset['Launched Date'].map(str) + ' ' + dataset['Time'].map(str)
     dataset['Launched Date'] = pd.to_datetime(dataset['Launched Date'])
 
     # Drop apps open for under a minute and irrelevant columns
-    dataset = dataset.drop(['Time', 'State', 'Total Run time', 'Front most'], axis = 1)
+    dataset = dataset.drop(['Time', 'State', 'Total Run time', 'Front most'], \
+    axis = 1)
     dataset = dataset.loc[dataset['Front most in seconds'] > 61]
 
     # Rename columns
-    dataset.rename(columns = {'Computer':'computer','Name':'process', 'Launched Date':'date', 'Front most in seconds':'frontmost_time', 'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, inplace = True)
+    dataset.rename(columns = {'Computer':'computer','Name':'process', \
+    'Launched Date':'date', 'Front most in seconds':'frontmost_time', \
+    'User Name':'user_name', 'Total Run time in seconds':'total_runtime'}, \
+    inplace = True)
 
     # Consolidate different versions of Adobe apps
     for i in dataset.iterrows():
@@ -74,7 +81,8 @@ def upload_app_filter(app_file):
 
     # Check for duplicates
     if dbconfig.engine.has_table('app_filter'):
-        existing_apps = pd.read_sql_table('app_filter', con = dbconfig.engine.connect())
+        existing_apps = pd.read_sql_table('app_filter', \
+        con = dbconfig.engine.connect())
         apps = apps[~apps.isin(existing_apps.app)]
 
     # Put
