@@ -5,7 +5,8 @@ import sqlite3
 from config import configs
 
 # Globally acessible libraries
-db = SQLAlchemy() 
+db = SQLAlchemy()
+
 
 def init_app():
     '''Initialize the core application'''
@@ -24,6 +25,6 @@ def init_app():
     with app.app_context():
         # Include routes
         from . import views
-        from . import methods    
+        from . import methods
 
         return app

@@ -2,11 +2,14 @@ import re
 from flask import current_app as app, request
 from api import methods
 
+
 @app.route('/')
 def index():
     return "Hello world!"
 
 # Upload routes
+
+
 @app.route('/upload')
 def upload_data():
     data_type = request.args['type']
@@ -20,11 +23,15 @@ def upload_data():
         return methods.upload_usage_data(file)
 
 # Dataframe view
+
+
 @app.route('/dataframe')
 def data():
     return methods.set_dataframe() .to_json(), {'Content-Type': 'application/json'}
 
 # Usage routes
+
+
 @app.route('/usage', methods=['GET'])
 def usage():
     data_type = request.args['type']
