@@ -1,223 +1,157 @@
 import './App.css';
-import { Component, useState } from 'react';
+import { useState } from 'react';
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
-  Breadcrumb,
+  AppShell,
+  Burger,
+  Button,
   Card,
-  Col,
-  Row,
-  Layout,
-  Menu,
-  DatePicker,
-  Space,
-  Statistic,
+  Container,
+  Flex,
+  Grid,
+  Group,
+  Header,
+  Image,
+  MediaQuery,
+  Navbar,
   Table,
-  theme
-} from 'antd';
-import Chart from "react-apexcharts";
-
-const { RangePicker } = DatePicker;
-
-/* Layout */
-const { Header, Content, Footer, Sider } = Layout;
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-/* Sidebar Data */
-const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
-];
-
-/* Table Data */
-const dataSource = [
-  {
-    key: '1',
-    app: 'Premiere',
-    users: 52,
-    month: 'July',
-  },
-  {
-    key: '2',
-    app: 'Audacity',
-    users: 21,
-    month: 'October',
-  },
-];
-
-const columns = [
-  {
-    title: 'Application',
-    dataIndex: 'app',
-    key: 'app',
-  },
-  {
-    title: 'Users',
-    dataIndex: 'users',
-    key: 'users',
-  },
-  {
-    title: 'Busiest Month',
-    dataIndex: 'month',
-    key: 'month',
-  },
-];
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
+import { DateRangePicker } from '@mantine/dates';
+import Apex from './Components'
 
 
-/* Apex Chart */
-class Apex extends Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
+  const [value, setValue] = useState(
+    new Date(2021, 11, 1),
+    new Date(2021, 11, 5));
+  const elements = [
+    { name: 'Adobe Premiere', users: '31', month: 'July 2022' },
+    { name: 'Audacity', users: '17', month: 'November 2022' },
+    { name: 'Adobe Audition', users: '14', month: 'November 2022' },
+    { name: 'Photoshop', users: '11', month: 'October 2022' },
+    { name: 'Rhino', users: '8', month: 'July 2022' }
+  ];
 
-    this.state = {
-      options: {
-        chart: {
-          id: "basic-bar"
-        },
-        xaxis: {
-          categories: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
-        }
-      },
-      series: [
-        {
-          name: "Users",
-          data: [30, 40, 45, 50, 49, 60, 70]
-        }
-      ]
-    };
-  }
+  const rows = elements.map((element) => (
+    <tr key={element.name}>
+      <td>{element.name}</td>
+      <td>{element.users}</td>
+      <td>{element.month}</td>
+    </tr>
+  ));
 
-  render() {
-    return (
-      <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
-            <Chart
-              options={this.state.options}
-              series={this.state.series}
-              type="bar"
-              width="500"
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-/* Ant Design Layout */
-const App = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
+    <AppShell
+      navbarOffsetBreakpoint='sm'
+      asideOffsetBreakpoint='sm'
+      layout='alt'
+      styles={(theme) => ({
+        main: { backgroundColor: theme.colors.gray[0] },
+      })}
+      navbar={
+        <Navbar
+          p='md'
+          hiddenBreakpoint='sm'
+          hidden={!opened}
+          width={{ sm: 200, lg: 200 }}
+          sx={(theme) => ({
+            backgroundImage: theme.fn.gradient({ from: 'cyan', to: 'violet', deg: 190 }),
+            color: theme.white,
+          })
+          } >
+          <Navbar.Section>
+            <Image src='/Users/alex/Documents/programming/dll/lab-use-dashboard/frontend/src/dll-logo.png'
+              alt='Digital Learning Lab Logo' />
+          </Navbar.Section>
+          <Navbar.Section grow mt='md'>
+            <Text>Software</Text>
+            <Text>Upload Data</Text>
+            <Text>Help</Text>
+          </Navbar.Section>
+          <Navbar.Section>
+            Footer
+          </Navbar.Section>
+        </ Navbar>
+      }
+      header={
+        <Header height={{ base: 50, md: 70 }} p='md'>
+          <Flex justify="flex-end">
+            <MediaQuery largerThan='sm' styles={{ display: 'none' }}>
+              <Burger
+                opened={opened}
+                onClick={() => setOpened((o) => !o)}
+                size='sm'
+                color={theme.colors.gray[6]}
+                mr='xl'
+              />
+            </MediaQuery>
+            <Group position="center" pb="xl" px="md">
+              <Button variant="default">Log Out</Button>
+            </Group>
+          </Flex>
+        </Header>
+      }
     >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div
-          style={{
-            height: 32,
-            margin: 16,
-            background: 'rgba(255, 255, 255, 0.2)',
-          }}
-        />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        />
-        <Content
-          style={{
-            margin: '0 16px',
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: '16px 0',
-            }}
-          >
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
+      <Container size='xl' mt='xl' p='xl' sx={(theme) => ({ backgroundColor: theme.white })}>
+        <Grid>
+          <Grid.Col xs={8}>
+            <Title order={1}>DLL Usage Stats - %DATE</Title>
+          </Grid.Col>
+          <Grid.Col xs={4} p='sm'>
+            <DateRangePicker
+              pb='xl'
+              placeholder='Pick date range'
+              value={value}
+              onChange={setValue}
+              firstDayOfWeek="sunday"
+            />
+          </Grid.Col>
+        </Grid>
+        <Grid gutter='xl'>
+          <Grid.Col xs={12} lg={5} pt='lg'>
+            <Grid>
+              <Grid.Col xs={6}>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <Text fz='xs' c='dark.2'>Unique Users</Text>
+                  <Text fz='xl'>
+                    212
+                  </Text>
+                </Card>
+              </Grid.Col>
+              <Grid.Col xs={6}>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <Text fz='xs' c='dark.2'>Average Session Length</Text>
+                  <Text fz='xl'>
+                    2 hours
+                  </Text>
+                </Card>
+              </Grid.Col>
+            </Grid>
+            <Title order={2} mt='xl'>Popular Software</Title>
+            <Table mt='xs'>
+              <thead>
+                <tr>
+                  <th>Application</th>
+                  <th>Users</th>
+                  <th>Busiest Month</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </Table>
+          </Grid.Col>
+          <Grid.Col xs={12} lg={6} offset={1}>
+            <Title order={2}>Average Daily Users</Title>
+            <Apex />
+          </Grid.Col>
 
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
-            <Row>
-              <Space direction="vertical" size={12}>
-                <RangePicker />
-              </Space>
-            </Row>
-
-            <Row>
-              <Col span={12}>
-                Average Daily Users
-                <Apex />
-              </Col>
-
-              <Col span={12}>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Card>
-                      <Statistic title="Active Users" value={112893} />
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card>
-                      <Statistic title="Account Balance (CNY)" value={112893} precision={2} />
-                    </Card>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={24}>
-                    <Table dataSource={dataSource} columns={columns} pagination={false} />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </div>
-
-        </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-        </Footer>
-      </Layout >
-    </Layout >
+        </Grid>
+      </Container>
+    </AppShell >
   );
-};
+}
 
 export default App;
