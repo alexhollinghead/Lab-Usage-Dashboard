@@ -2,14 +2,17 @@ import { Component } from 'react';
 import Chart from "react-apexcharts";
 
 /* Apex Chart */
-class Apex extends Component {
+class DailyAverage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             options: {
                 chart: {
-                    id: "basic-bar"
+                    id: "basic-bar",
+                    toolbar: {
+                        show: false,
+                    },
                 },
                 xaxis: {
                     categories: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
@@ -18,7 +21,7 @@ class Apex extends Component {
             series: [
                 {
                     name: "Users",
-                    data: [30, 40, 45, 50, 49, 60, 70]
+                    data: [45, 40, 45, 50, 49, 20, 10]
                 }
             ]
         };
@@ -41,4 +44,4 @@ class Apex extends Component {
     }
 }
 
-export default Apex
+export default DailyAverage

@@ -15,12 +15,14 @@ import {
   Navbar,
   Table,
   Text,
+  ThemeIcon,
   Title,
   useMantineTheme,
 } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
 import { IconUser, IconClockHour4, IconAppWindow, IconCalendarTime } from '@tabler/icons';
-import Apex from './Components'
+import DailyAverage from './DailyAverage'
+import MonthlyTrend from './MonthlyTrend'
 
 
 function App() {
@@ -102,7 +104,7 @@ function App() {
       <Container size='xl' p='xl'>
         <Grid gutter='xl'>
           <Grid.Col xs={12} lg={8}>
-            <Title order={1}>DLL Usage Stats - %DATE</Title>
+            <Title order={1}>DLL Usage Stats - %DATERANGE</Title>
           </Grid.Col>
           <Grid.Col xs={12} lg={4} p='sm'>
             <DateRangePicker
@@ -117,32 +119,37 @@ function App() {
             <Grid gutter='lg'>
               <Grid.Col xs={12} md={6}>
                 <Card shadow='None' p='lg' c='white' withBorder radius='md' sx={(theme) => ({
-                  backgroundImage: theme.fn.gradient({ from: 'blue.6', to: 'blue.4', deg: 90 }),
+                  backgroundImage: theme.fn.gradient({ from: 'blue.5', to: 'blue.3', deg: 90 }),
                 })}>
-                  <IconUser size={48} strokeWidth={1} />
-                  <Text tt='uppercase' fz='xs'>Unique Users</Text>
-                  <Text fz='xl'>
+                  <ThemeIcon color='blue.9' size='xl' mb='xs'>
+                    <IconUser strokeWidth={2} />
+                  </ThemeIcon>
+                  <Text size='2.2rem'>
                     212
                   </Text>
+                  <Text tt='uppercase' fz='sm' fw={500} mt='md'>Unique Users</Text>
                 </Card>
               </Grid.Col>
 
               <Grid.Col sm={12} md={6}>
                 <Card shadow='None' p='lg' c='white' withBorder radius='md' sx={(theme) => ({
-                  backgroundImage: theme.fn.gradient({ from: 'blue.6', to: 'blue.4', deg: 90 }),
+                  backgroundImage: theme.fn.gradient({ from: 'blue.5', to: 'blue.3', deg: 90 }),
                 })}>
-                  <IconClockHour4 size={48} strokeWidth={1} />
-                  <Text tt='uppercase' fz='xs'>Avg Session</Text>
-                  <Text fz='xl'>
-                    2 hours
+                  <ThemeIcon color='blue.9' size='xl' mb='xs'>
+                    <IconAppWindow strokeWidth={2} />
+                  </ThemeIcon>
+                  <Text size='2.2rem'>
+                    Adobe Premiere
                   </Text>
+                  <Text tt='uppercase' fz='sm' fw={500} mt='md'>Most Popular Program</Text>
+
                 </Card>
               </Grid.Col>
 
               <Grid.Col>
                 <Card shadow='None' p='lg' withBorder radius='md'>
-                  <Title order={2}>Average Daily Users</Title>
-                  <Apex />
+                  <Title order={2} mb='xl'>Users Per Month</Title>
+                  <MonthlyTrend />
                 </Card>
               </Grid.Col>
             </Grid>
@@ -150,22 +157,30 @@ function App() {
 
           <Grid.Col xs={12} lg={4}>
             <Grid gutter='lg'>
-              <Grid.Col>
-                <Card shadow='None' p='lg' withBorder radius='md'>
-                  <IconAppWindow size={48} strokeWidth={1} />
-                  <Text tt='uppercase' fz='xs' c='dark.2'>Most Popular</Text>
-                  <Text fz='xl'>
-                    Premiere
-                  </Text>
+              <Grid.Col xs={12} sm={6} md={12}>
+                <Card shadow='None' p='md' withBorder radius='md'>
+                  <Group>
+                    <IconClockHour4 inline='True' size={48} strokeWidth={1} />
+                    <div>
+                      <Text tt='uppercase' fz='xs' c='dark.2'>Avg Session Duration</Text>
+                      <Text fz='md' >
+                        2 hours
+                      </Text>
+                    </div>
+                  </Group>
                 </Card>
               </Grid.Col>
-              <Grid.Col>
-                <Card shadow='None' p='lg' withBorder radius='md'>
-                  <IconCalendarTime size={48} strokeWidth={1} />
-                  <Text tt='uppercase' fz='xs' c='dark.2'>Busiest Time</Text>
-                  <Text fz='xl'>
-                    Wed @ 7
-                  </Text>
+              <Grid.Col xs={12} sm={6} md={12}>
+                <Card shadow='None' p='md' withBorder radius='md'>
+                  <Group>
+                    <IconCalendarTime size={48} strokeWidth={1} />
+                    <div>
+                      <Text tt='uppercase' fz='xs' c='dark.2'>Busiest Time</Text>
+                      <Text fz='md'>
+                        Wed @ 7
+                      </Text>
+                    </div>
+                  </Group>
                 </Card>
               </Grid.Col>
               <Grid.Col>
@@ -181,6 +196,12 @@ function App() {
                     </thead>
                     <tbody>{rows}</tbody>
                   </Table>
+                </Card>
+              </Grid.Col>
+              <Grid.Col>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <Title order={2}>Average Users by Day</Title>
+                  <DailyAverage />
                 </Card>
               </Grid.Col>
             </Grid>
