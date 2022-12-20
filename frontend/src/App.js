@@ -19,6 +19,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
+import { IconUser, IconClockHour4, IconAppWindow, IconCalendarTime } from '@tabler/icons';
 import Apex from './Components'
 
 
@@ -68,7 +69,9 @@ function App() {
               alt='Digital Learning Lab Logo' />
           </Navbar.Section>
           <Navbar.Section grow mt='md'>
+            <Text>Overview</Text>
             <Text>Software</Text>
+            <Text>Computer Usage</Text>
             <Text>Upload Data</Text>
             <Text>Help</Text>
           </Navbar.Section>
@@ -96,12 +99,12 @@ function App() {
         </Header>
       }
     >
-      <Container size='xl' mt='xl' p='xl' sx={(theme) => ({ backgroundColor: theme.white })}>
-        <Grid>
-          <Grid.Col xs={8}>
+      <Container size='xl' p='xl'>
+        <Grid gutter='xl'>
+          <Grid.Col xs={12} lg={8}>
             <Title order={1}>DLL Usage Stats - %DATE</Title>
           </Grid.Col>
-          <Grid.Col xs={4} p='sm'>
+          <Grid.Col xs={12} lg={4} p='sm'>
             <DateRangePicker
               pb='xl'
               placeholder='Pick date range'
@@ -110,44 +113,78 @@ function App() {
               firstDayOfWeek="sunday"
             />
           </Grid.Col>
-        </Grid>
-        <Grid gutter='xl'>
-          <Grid.Col xs={12} lg={5} pt='lg'>
-            <Grid>
-              <Grid.Col xs={6}>
-                <Card shadow='None' p='lg' withBorder radius='md'>
-                  <Text fz='xs' c='dark.2'>Unique Users</Text>
+          <Grid.Col xs={12} lg={8}>
+            <Grid gutter='lg'>
+              <Grid.Col xs={12} md={6}>
+                <Card shadow='None' p='lg' c='white' withBorder radius='md' sx={(theme) => ({
+                  backgroundImage: theme.fn.gradient({ from: 'blue.6', to: 'blue.4', deg: 90 }),
+                })}>
+                  <IconUser size={48} strokeWidth={1} />
+                  <Text tt='uppercase' fz='xs'>Unique Users</Text>
                   <Text fz='xl'>
                     212
                   </Text>
                 </Card>
               </Grid.Col>
-              <Grid.Col xs={6}>
-                <Card shadow='None' p='lg' withBorder radius='md'>
-                  <Text fz='xs' c='dark.2'>Average Session Length</Text>
+
+              <Grid.Col sm={12} md={6}>
+                <Card shadow='None' p='lg' c='white' withBorder radius='md' sx={(theme) => ({
+                  backgroundImage: theme.fn.gradient({ from: 'blue.6', to: 'blue.4', deg: 90 }),
+                })}>
+                  <IconClockHour4 size={48} strokeWidth={1} />
+                  <Text tt='uppercase' fz='xs'>Avg Session</Text>
                   <Text fz='xl'>
                     2 hours
                   </Text>
                 </Card>
               </Grid.Col>
+
+              <Grid.Col>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <Title order={2}>Average Daily Users</Title>
+                  <Apex />
+                </Card>
+              </Grid.Col>
             </Grid>
-            <Title order={2} mt='xl'>Popular Software</Title>
-            <Table mt='xs'>
-              <thead>
-                <tr>
-                  <th>Application</th>
-                  <th>Users</th>
-                  <th>Busiest Month</th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </Table>
-          </Grid.Col>
-          <Grid.Col xs={12} lg={6} offset={1}>
-            <Title order={2}>Average Daily Users</Title>
-            <Apex />
           </Grid.Col>
 
+          <Grid.Col xs={12} lg={4}>
+            <Grid gutter='lg'>
+              <Grid.Col>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <IconAppWindow size={48} strokeWidth={1} />
+                  <Text tt='uppercase' fz='xs' c='dark.2'>Most Popular</Text>
+                  <Text fz='xl'>
+                    Premiere
+                  </Text>
+                </Card>
+              </Grid.Col>
+              <Grid.Col>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <IconCalendarTime size={48} strokeWidth={1} />
+                  <Text tt='uppercase' fz='xs' c='dark.2'>Busiest Time</Text>
+                  <Text fz='xl'>
+                    Wed @ 7
+                  </Text>
+                </Card>
+              </Grid.Col>
+              <Grid.Col>
+                <Card shadow='None' p='lg' withBorder radius='md'>
+                  <Title order={2}>Popular Software</Title>
+                  <Table striped highlightOnHover mt='xs'>
+                    <thead>
+                      <tr>
+                        <th>Application</th>
+                        <th>Users</th>
+                        <th>Busiest Month</th>
+                      </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                  </Table>
+                </Card>
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
         </Grid>
       </Container>
     </AppShell >

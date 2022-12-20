@@ -39,7 +39,6 @@ class Apex extends Component {
             </div>
         );
     }
-
 }
 
 export default Apex
