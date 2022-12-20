@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import Chart from "react-apexcharts";
 
-/* Apex Chart */
-class MonthlyTrend extends Component {
+class DailyAverage extends Component {
     constructor(props) {
         super(props);
 
@@ -14,17 +13,14 @@ class MonthlyTrend extends Component {
                         show: false,
                     },
                 },
-                stroke: {
-                    curve: 'smooth',
-                },
                 xaxis: {
-                    categories: ["Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+                    categories: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
                 }
             },
             series: [
                 {
                     name: "Users",
-                    data: [30, 40, 45, 50, 49, 60, 50]
+                    data: [45, 40, 45, 50, 49, 20, 10]
                 }
             ]
         };
@@ -37,8 +33,8 @@ class MonthlyTrend extends Component {
                         <Chart
                             options={this.state.options}
                             series={this.state.series}
-                            type="line"
-                            height="538px"
+                            type="bar"
+                            align="right"
                         />
                     </div>
                 </div>
@@ -47,4 +43,4 @@ class MonthlyTrend extends Component {
     }
 }
 
-export default MonthlyTrend
+export default DailyAverage

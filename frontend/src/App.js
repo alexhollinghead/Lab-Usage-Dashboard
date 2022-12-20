@@ -5,6 +5,7 @@ import {
   Burger,
   Button,
   Card,
+  Center,
   Container,
   Flex,
   Grid,
@@ -13,6 +14,7 @@ import {
   Image,
   MediaQuery,
   Navbar,
+  NavLink,
   Table,
   Text,
   ThemeIcon,
@@ -21,8 +23,8 @@ import {
 } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
 import { IconUser, IconClockHour4, IconAppWindow, IconCalendarTime } from '@tabler/icons';
-import DailyAverage from './DailyAverage'
-import MonthlyTrend from './MonthlyTrend'
+import DailyAverage from './components/DailyAverage'
+import MonthlyTrend from './components/MonthlyTrend'
 
 
 function App() {
@@ -38,7 +40,6 @@ function App() {
     { name: 'Photoshop', users: '11', month: 'October 2022' },
     { name: 'Rhino', users: '8', month: 'July 2022' }
   ];
-
   const rows = elements.map((element) => (
     <tr key={element.name}>
       <td>{element.name}</td>
@@ -67,15 +68,17 @@ function App() {
           })
           } >
           <Navbar.Section>
-            <Image src='/Users/alex/Documents/programming/dll/lab-use-dashboard/frontend/src/dll-logo.png'
-              alt='Digital Learning Lab Logo' />
+            <Center>
+              <Image src='dll-logo.png'
+                alt='Digital Learning Lab Logo' width='100px' />
+            </Center>
           </Navbar.Section>
           <Navbar.Section grow mt='md'>
-            <Text>Overview</Text>
-            <Text>Software</Text>
-            <Text>Computer Usage</Text>
-            <Text>Upload Data</Text>
-            <Text>Help</Text>
+            <NavLink color='theme.white' label="Overview" icon={<IconCalendarTime size={24} stroke={2} />} />
+            <NavLink color='blue.2' label="Software" icon={<IconCalendarTime size={24} stroke={2} />} />
+            <NavLink color='blue.2' label="Computer Usage" icon={<IconCalendarTime size={24} stroke={2} />} />
+            <NavLink color='blue.2' label="Upload Data" icon={<IconCalendarTime size={24} stroke={2} />} />
+            <NavLink color='blue.2' label="Help" icon={<IconCalendarTime size={24} stroke={2} />} />
           </Navbar.Section>
           <Navbar.Section>
             Footer
