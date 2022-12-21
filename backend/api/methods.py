@@ -22,8 +22,8 @@ def set_dataframe(start_date=datetime(2021, 1, 1), end_date=datetime.now()):
 
 def upload_usage_data(data_source):
     """
-    Take a csv file and add its contents to the database. 
-    If a db table does not exist yet, create the database.
+    Take a csv file and add its contents to the database. If a db table does not
+    exist yet, create the database.
     """
     # Build dataframe from CSV file
     dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python',
@@ -49,17 +49,17 @@ def upload_usage_data(data_source):
                    inplace=True)
 
     # Consolidate different versions of Adobe apps
-    for i in dataset.iterrows():
-        app_name = dataset.loc[i, 'process']
+    for i, row in dataset.iterrows():
+        app_name = row['process']
         if app_name[:5] == "Adobe" and app_name[-4:].isnumeric():
             dataset.at[i, 'process'] = app_name[:-5]
 
-    # Create database table
+        # Create database table
     try:
         dbconfig.put_data(dataset)
-        return 'Success!'
+        return 'DB table created!'
     except:
-        return "Error."
+        return "Error - db table not created."
 
 
 def upload_user_filter(user_file):
@@ -83,8 +83,7 @@ def upload_user_filter(user_file):
 
 def upload_app_filter(app_file):
     """
-    Adds process names from a .txt file to the filtered apps table
-    in the database.
+    Adds process names from a .txt file to the filtered apps table in the database.
     """
     file = open(app_file)
     app_list = [line.rstrip() for line in file.readlines()]

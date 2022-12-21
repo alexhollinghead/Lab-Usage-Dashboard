@@ -1,4 +1,3 @@
-import re
 from flask import current_app as app, request
 from api import methods
 
@@ -17,9 +16,9 @@ def upload_data():
 
     if data_type == 'userfilter':
         return methods.upload_user_filter(file)
-    elif data_type == 'appfilter':
+    if data_type == 'appfilter':
         return methods.upload_app_filter(file)
-    elif data_type == 'usage':
+    if data_type == 'usage':
         return methods.upload_usage_data(file)
 
 # Dataframe view
