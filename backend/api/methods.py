@@ -8,9 +8,9 @@ def set_dataframe(start_date, end_date):
     Builds a dataframe based on a specified date range.
 
     Parameters:
-    start_date : int (timestamp)
+    start_date : int -> timestamp
         The start of the date range in Unix epoch timestamp form
-    end_date : int (timestamp)
+    end_date : int -> timestamp
         The end of the date range in Unix epoch timestamp form
     """
     start_date = datetime.fromtimestamp(start_date)
@@ -22,7 +22,7 @@ def set_dataframe(start_date, end_date):
     dataset = dataset[(dataset['date'] >= start_date) &
                       (dataset['date'] <= end_date)]
 
-    # Consolidate apps used in a session
+    # Consolidate apps used by a user on the same machine in the same day
     dataset['day'] = dataset['date'].dt.date
     dataset = dataset.groupby(['user_name', 'computer', 'day'],
                               as_index=False).agg({'process': lambda x: list(x)})
@@ -67,7 +67,7 @@ def upload_usage_data(data_source):
         # Create database table
     try:
         dbconfig.put_data(dataset)
-        return 'DB table created!'
+        return 'Data uploaded successfully'
     except:
         return "Error - db table not created."
 
@@ -87,8 +87,11 @@ def upload_user_filter(user_file):
         users = users[~users.isin(existing_users.user)]
 
     # Put
-    dbconfig.filter_add('user_filter', dataframe=users, label='users')
-    return 'Success!'
+    try:
+        dbconfig.filter_add('user_filter', dataframe=users, label='users')
+        return 'Success!'
+    except:
+        return "Upload failed"
 
 
 def upload_app_filter(app_file):
@@ -106,13 +109,16 @@ def upload_app_filter(app_file):
         apps = apps[~apps.isin(existing_apps.app)]
 
     # Put
-    dbconfig.filter_add('app_filter', dataframe=apps, label='app')
-    return 'Success'
+    try:
+        dbconfig.filter_add('app_filter', dataframe=apps, label='app')
+        return 'Success'
+    except:
+        "Upload failed"
 
 
 def usage(data_type):
     """Returns a snapshot of lab usage"""
-    dataset = set_dataframe()
+    dataset = set_dataframe(1609459200, 1672531200)
 
     # Create filters based on lists of users and applications
     filtered_apps = pd.read_sql_table(
@@ -122,17 +128,24 @@ def usage(data_type):
     dataset = dataset[~dataset.process.isin(filtered_apps.app)]
     dataset = dataset[~dataset.user_name.isin(filtered_users.user)]
 
+    # Return number of application sessions
     if data_type == 'apps':
         app_frequency = dataset['process'].value_counts()
         data_view = app_frequency.to_json(
         ), {'Content-Type': 'application/json'}
+
+    # Return total number of user sessions
     elif data_type == 'users':
         user_frequency = dataset['user_name'].value_counts()
         data_view = user_frequency.to_json(
         ), {'Content-Type': 'application/json'}
+
+    # Return number of unique users
     elif data_type == 'unique_users':
         user_count = len(dataset['user_name'].unique())
         data_view = f'{user_count}'
+
+    # Return number of users per computer
     elif data_type == 'stations':
         machine_sessions = dataset['computer'].value_counts()
         data_view = machine_sessions.to_json(
