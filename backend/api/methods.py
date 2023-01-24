@@ -3,18 +3,28 @@ from . import dbconfig
 from datetime import datetime
 
 
-def set_dataframe(start_date=datetime(2021, 1, 1), end_date=datetime.now()):
+def set_dataframe(start_date, end_date):
     """
-    Builds a dataframe from date parameters
+    Builds a dataframe based on a specified date range.
+
+    Parameters:
+    start_date : int (timestamp)
+        The start of the date range in Unix epoch timestamp form
+    end_date : int (timestamp)
+        The end of the date range in Unix epoch timestamp form
     """
+    start_date = datetime.fromtimestamp(start_date)
+    end_date = datetime.fromtimestamp(end_date)
+
     dataset = pd.read_sql_table('usage', con=dbconfig.engine.connect())
+
     # Filter with date parameters
     dataset = dataset[(dataset['date'] >= start_date) &
                       (dataset['date'] <= end_date)]
 
     # Consolidate apps used in a session
     dataset['day'] = dataset['date'].dt.date
-    dataset = dataset.groupby(['computer', 'user_name', 'day'],
+    dataset = dataset.groupby(['user_name', 'computer', 'day'],
                               as_index=False).agg({'process': lambda x: list(x)})
 
     return dataset
@@ -70,7 +80,7 @@ def upload_user_filter(user_file):
     user_list = [line.rstrip() for line in file.readlines()]
     users = pd.Series(user_list, name='user')
 
-    # Check for duplicates
+    # Remove duplicates
     if dbconfig.engine.has_table('user_filter'):
         existing_users = pd.read_sql_table(
             'user_filter', con=dbconfig.engine.connect())
@@ -89,7 +99,7 @@ def upload_app_filter(app_file):
     app_list = [line.rstrip() for line in file.readlines()]
     apps = pd.Series(app_list, name='app')
 
-    # Check for duplicates
+    # Remove duplicates
     if dbconfig.engine.has_table('app_filter'):
         existing_apps = pd.read_sql_table('app_filter',
                                           con=dbconfig.engine.connect())

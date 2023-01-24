@@ -1,5 +1,6 @@
 from flask import current_app as app, request
 from api import methods
+from datetime import datetime
 
 
 @app.route('/')
@@ -26,12 +27,12 @@ def upload_data():
 
 @app.route('/dataframe')
 def data():
-    return methods.set_dataframe() .to_json(), {'Content-Type': 'application/json'}
+    return methods.set_dataframe(1609459200, 1672531200).to_json(), {'Content-Type': 'application/json'}
 
 # Usage routes
 
 
-@app.route('/usage', methods=['GET'])
+@ app.route('/usage', methods=['GET'])
 def usage():
     data_type = request.args['type']
     return methods.usage(data_type)
