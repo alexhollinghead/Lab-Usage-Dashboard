@@ -25,15 +25,16 @@ def set_dataframe(start_date, end_date):
     # Consolidate apps used by a user on the same machine in the same day
     dataset['day'] = dataset['date'].dt.date
     dataset = dataset.groupby(['user_name', 'computer', 'day'],
-                              as_index=False).agg({'process': lambda x: list(x)})
+                              as_index=False).agg(
+        {'process': lambda x: list(x)})
 
     return dataset
 
 
 def upload_usage_data(data_source):
     """
-    Take a csv file and add its contents to the database. If a db table does not
-    exist yet, create the database.
+    Take a csv file and add its contents to the database. If a db table does
+    not exist yet, create the database.
     """
     # Build dataframe from CSV file
     dataset = pd.read_csv(data_source, sep=r'\s*,\s*', engine='python',
@@ -88,7 +89,7 @@ def upload_user_filter(user_file):
 
     # Put
     try:
-        dbconfig.filter_add('user_filter', dataframe=users, label='users')
+        dbconfig.filter_add('user_filter', data_series=users, label='users')
         return 'Success!'
     except:
         return "Upload failed"
@@ -96,7 +97,8 @@ def upload_user_filter(user_file):
 
 def upload_app_filter(app_file):
     """
-    Adds process names from a .txt file to the filtered apps table in the database.
+    Adds process names from a .txt file to the filtered apps table in the
+    database.
     """
     file = open(app_file)
     app_list = [line.rstrip() for line in file.readlines()]
@@ -110,7 +112,7 @@ def upload_app_filter(app_file):
 
     # Put
     try:
-        dbconfig.filter_add('app_filter', dataframe=apps, label='app')
+        dbconfig.filter_add('app_filter', data_series=apps, label='app')
         return 'Success'
     except:
         "Upload failed"
@@ -129,10 +131,13 @@ def usage(data_type):
     dataset = dataset[~dataset.user_name.isin(filtered_users.user)]
 
     # Return number of application sessions
+    # TODO: refactor to use an un-aggregated dataframe
     if data_type == 'apps':
-        app_frequency = dataset['process'].value_counts()
-        data_view = app_frequency.to_json(
-        ), {'Content-Type': 'application/json'}
+        data_view = [None]
+    #     app_frequency = dataset['process'].value_counts()
+    #     return app_frequency.to_json()
+    #     data_view = app_frequency.to_json(
+    #     ), {'Content-Type': 'application/json'}
 
     # Return total number of user sessions
     elif data_type == 'users':

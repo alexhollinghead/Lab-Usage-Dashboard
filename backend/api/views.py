@@ -27,7 +27,8 @@ def upload_data():
 
 @app.route('/dataframe')
 def data():
-    return methods.set_dataframe(1609459200, 1672531200).to_json(), {'Content-Type': 'application/json'}
+    return methods.set_dataframe(1609459200, 1672531200).to_json(), {
+        'Content-Type': 'application/json'}
 
 # Usage routes
 
