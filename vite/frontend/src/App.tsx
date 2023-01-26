@@ -58,17 +58,17 @@ function App() {
 
   const [uniqueUsers, setUniqueUsers] = useState();
   let dateStart = 1661990400;
-  let dateEnd = 1672531200
+  let dateEnd = 1672531200;
   useEffect(() => {
-    // fetch('http://127.0.0.1:5000/usage?type=unique_users&start=1661990400&end=1672531200')
-    /** TODO: import moment.js and format the dates correctly for this query */
-    fetch(
-      'http://127.0.0.1:5000/usage?' + new URLSearchParams({
-        type: 'unique_users',
-        start: dateStart,
-        end: dateEnd
-      })
-    )
+    fetch('http://127.0.0.1:5000/usage?type=unique_users&start=1661990400&end=1672531200')
+      // /** TODO: import moment.js and format the dates correctly for this query */
+      // fetch(
+      //   'http://127.0.0.1:5000/usage?' + new URLSearchParams({
+      //     type: 'unique_users',
+      //     start: dateStart,
+      //     end: dateEnd
+      //   })
+      // )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

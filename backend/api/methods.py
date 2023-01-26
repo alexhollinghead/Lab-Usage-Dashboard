@@ -1,6 +1,6 @@
-from datetime import datetime
 import pandas as pd
 from . import dbconfig
+from datetime import datetime
 
 
 def set_dataframe(start_date, end_date):
@@ -89,8 +89,7 @@ def upload_user_filter(user_file):
 
     # Put
     try:
-        dbconfig.filter_add(
-            'user_filter', data_series=users, col_label='users')
+        dbconfig.filter_add('user_filter', data_series=users, label='users')
         return 'Success!'
     except:
         return "Upload failed"
@@ -113,15 +112,15 @@ def upload_app_filter(app_file):
 
     # Put
     try:
-        dbconfig.filter_add('app_filter', data_series=apps, col_label='app')
+        dbconfig.filter_add('app_filter', data_series=apps, label='app')
         return 'Success'
     except:
         "Upload failed"
 
 
-def usage(data_type, start_date, end_date):
+def usage(data_type):
     """Returns a snapshot of lab usage"""
-    dataset = set_dataframe(int(start_date), int(end_date))
+    dataset = set_dataframe(1609459200, 1672531200)
 
     # Create filters based on lists of users and applications
     filtered_apps = pd.read_sql_table(

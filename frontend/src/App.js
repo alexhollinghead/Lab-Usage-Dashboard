@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   AppShell,
   Burger,
@@ -30,11 +30,9 @@ import MonthlyTrend from './components/MonthlyTrend'
 function App() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-
-  const [dateRange, setDateRange] = useState(
-    new Date(2021, 8, 1), new Date(2022, 12, 25));
-
-  /* TODO: Write function to fetch top 5 apps from backend */
+  const [value, setValue] = useState(
+    new Date(2021, 11, 1),
+    new Date(2021, 11, 5));
   const elements = [
     { name: 'Adobe Premiere', users: '31', month: 'July 2022' },
     { name: 'Audacity', users: '17', month: 'November 2022' },
@@ -49,19 +47,6 @@ function App() {
       <td>{element.month}</td>
     </tr>
   ));
-
-  const [uniqueUsers, setUniqueUsers] = useState();
-  useEffect(() => {
-    fetch('http://127.0.0.1:5000/usage?type=unique_users&start=1661990400&end=1672531200')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setUniqueUsers(data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, []);
 
   return (
     <AppShell
@@ -122,14 +107,14 @@ function App() {
       <Container size='xl' p='xl'>
         <Grid gutter='xl'>
           <Grid.Col xs={12} lg={8}>
-            <Title order={1}>DLL Usage Stats</Title>
+            <Title order={1}>DLL Usage Stats - %DATERANGE</Title>
           </Grid.Col>
           <Grid.Col xs={12} lg={4} p='sm'>
             <DateRangePicker
               pb='xl'
               placeholder='Pick date range'
-              value={dateRange}
-              onChange={setDateRange}
+              value={value}
+              onChange={setValue}
               firstDayOfWeek="sunday"
             />
           </Grid.Col>
@@ -143,7 +128,7 @@ function App() {
                     <IconUser strokeWidth={2} />
                   </ThemeIcon>
                   <Text size='2.2rem'>
-                    {uniqueUsers}
+                    212
                   </Text>
                   <Text tt='uppercase' fz='sm' fw={500} mt='md'>Unique Users</Text>
                 </Card>

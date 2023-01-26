@@ -27,9 +27,7 @@ def upload_data():
 
 @app.route('/dataframe')
 def data():
-    start_date = request.args['start']
-    end_date = request.args['end']
-    return methods.set_dataframe(start_date, end_date).to_json(), {
+    return methods.set_dataframe(1609459200, 1672531200).to_json(), {
         'Content-Type': 'application/json'}
 
 # Usage routes
@@ -38,6 +36,4 @@ def data():
 @ app.route('/usage', methods=['GET'])
 def usage():
     data_type = request.args['type']
-    start_date = request.args['start']
-    end_date = request.args['end']
-    return methods.usage(data_type, start_date, end_date)
+    return methods.usage(data_type)
