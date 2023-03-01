@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useDeferredValue } from 'react';
 import {
   AppShell,
   Burger,
@@ -20,31 +20,29 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core';
-
+import { DateRangePicker } from '@mantine/dates';
 import { IconClockHour4, IconCalendarTime } from '@tabler/icons';
 import DailyAverage from './components/DailyAverage'
 import MonthlyTrend from './components/MonthlyTrend'
 import UniqueUsers from './components/UniqueUsers';
 import PopularSoftware from './components/PopularSoftware';
-import DateSelect from './components/DateSelect';
-import { DateRangePicker, DateRangePickerValue } from '@mantine/dates';
 import MostUsedProgram from './components/MostUsedProgram';
 // TODO: Fix modularization of DateRange text
 
 function App() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRangePickerValue>([
-    new Date(2021, 8, 1),
+  const [value, setValue] = useState<[Date, Date]>([
+    new Date(2021, 10, 1),
     new Date(2022, 12, 25)
   ]);
-  const dates = dateRange.map((date) => (
-    date.toLocaleDateString("en-US") + " - "
-  ));
+  const startDate = value[0] ? value[0].toLocaleDateString("en-US") : ``
+  const endDate = value[1] ? value[1].toLocaleDateString("en-US") : ``
+
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      
+
       <AppShell
         navbarOffsetBreakpoint='sm'
         asideOffsetBreakpoint='sm'
@@ -110,10 +108,16 @@ function App() {
         <Container size='xl' p='xl'>
           <Grid gutter='xl'>
             <Grid.Col xs={12} lg={8}>
-              <Title order={1}>DLL Usage Stats: {dates}</Title>
+              <Title order={1}>DLL Usage Stats: {startDate} - {endDate}</Title>
             </Grid.Col>
             <Grid.Col xs={12} lg={4} p='sm'>
-              <DateSelect />
+            <DateRangePicker
+              pb='xl'
+              placeholder='Pick date range'
+              value={value}
+              onChange={setValue}
+              firstDayOfWeek="sunday" 
+            />
             </Grid.Col>
             <Grid.Col xs={12} lg={8}>
               <Grid gutter='lg'>
@@ -150,7 +154,8 @@ function App() {
                     <Group>
                       <IconCalendarTime size={48} strokeWidth={1} />
                       <div>
-                        <Text tt='uppercase' fz='xs' c='dark.2'>Busiest Time</Text>
+                        <Text tt='uppercase' fz='xs' c='dark.2'>
+                          Busiest Time</Text>
                         <Text fz='md'>
                           Wed @ 7
                         </Text>

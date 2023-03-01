@@ -20,7 +20,7 @@ function UniqueUsers() {
             .then((data) => {
             console.log(data);
             setUniqueUsers(data);
-            })
+            }) 
             .catch((err) => {
             console.log(err.message);
             });
