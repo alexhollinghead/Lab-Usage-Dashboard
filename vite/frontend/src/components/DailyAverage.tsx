@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Card, Title } from '@mantine/core'
 import Chart from "react-apexcharts";
 
 class DailyAverage extends Component {
@@ -27,6 +28,8 @@ class DailyAverage extends Component {
     }
     render() {
         return (
+            <Card shadow='None' p='lg' withBorder radius='md'>
+                    <Title order={2}>Average Users by Day</Title>
             <div className="app">
                 <div className="row">
                     <div className="mixed-chart">
@@ -39,6 +42,7 @@ class DailyAverage extends Component {
                     </div>
                 </div>
             </div>
+            </Card>
         );
     }
 }

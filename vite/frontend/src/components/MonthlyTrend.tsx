@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Card, Title } from '@mantine/core'
 import Chart from "react-apexcharts";
 
 class MonthlyTrend extends Component {
@@ -30,6 +31,8 @@ class MonthlyTrend extends Component {
     }
     render() {
         return (
+            <Card shadow='None' p='lg' withBorder radius='md'>
+            <Title order={2} mb='xl'>Users Per Month</Title>
             <div className="app" >
                 <div className="row" >
                     <div className="mixed-chart" >
@@ -41,7 +44,7 @@ class MonthlyTrend extends Component {
                         />
                     </div>
                 </div>
-            </div>
+            </div></Card>
         );
     }
 }
