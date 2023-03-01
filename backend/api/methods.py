@@ -1,6 +1,6 @@
+from datetime import datetime
 import pandas as pd
 from . import dbconfig
-from datetime import datetime
 
 
 def set_dataframe(start_date, end_date):
@@ -26,7 +26,7 @@ def set_dataframe(start_date, end_date):
     dataset['day'] = dataset['date'].dt.date
     dataset = dataset.groupby(['user_name', 'computer', 'day'],
                               as_index=False).agg(
-        {'process': lambda x: list(x)})
+        {'process': lambda x: pd.unique(list(x)).tolist()})
 
     return dataset
 
@@ -89,7 +89,8 @@ def upload_user_filter(user_file):
 
     # Put
     try:
-        dbconfig.filter_add('user_filter', data_series=users, label='users')
+        dbconfig.filter_add(
+            'user_filter', data_series=users, col_label='users')
         return 'Success!'
     except:
         return "Upload failed"
@@ -112,30 +113,32 @@ def upload_app_filter(app_file):
 
     # Put
     try:
-        dbconfig.filter_add('app_filter', data_series=apps, label='app')
+        dbconfig.filter_add('app_filter', data_series=apps, col_label='app')
         return 'Success'
     except:
         "Upload failed"
 
 
-def usage(data_type):
+def usage(data_type, start_date, end_date):
     """Returns a snapshot of lab usage"""
-    dataset = set_dataframe(1609459200, 1672531200)
+    dataset = set_dataframe(int(start_date), int(end_date))
 
     # Create filters based on lists of users and applications
     filtered_apps = pd.read_sql_table(
         'app_filter', con=dbconfig.engine.connect())
     filtered_users = pd.read_sql_table(
         'user_filter', con=dbconfig.engine.connect())
+
+    # TODO: Update filtered_apps to work on new list-based app column
     dataset = dataset[~dataset.process.isin(filtered_apps.app)]
     dataset = dataset[~dataset.user_name.isin(filtered_users.user)]
-
     # Return number of application sessions
     # TODO: refactor to use an un-aggregated dataframe
     if data_type == 'apps':
-        data_view = [None]
-    #     app_frequency = dataset['process'].value_counts()
-    #     return app_frequency.to_json()
+        # data_view = [None]
+        #     app_frequency = dataset['process'].value_counts()
+        app_frequency = dataset['process']
+        return app_frequency.to_json()
     #     data_view = app_frequency.to_json(
     #     ), {'Content-Type': 'application/json'}
 
@@ -144,6 +147,10 @@ def usage(data_type):
         user_frequency = dataset['user_name'].value_counts()
         data_view = user_frequency.to_json(
         ), {'Content-Type': 'application/json'}
+
+    elif data_type == 'monthly_users':
+        # Collect counts of sessions for each unique month+year in dataset
+        pass
 
     # Return number of unique users
     elif data_type == 'unique_users':

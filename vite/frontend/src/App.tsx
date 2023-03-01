@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useDeferredValue } from 'react';
+import { useState } from 'react';
 import {
   AppShell,
   Burger,
@@ -33,11 +33,12 @@ function App() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState<[Date, Date]>([
-    new Date(2021, 10, 1),
+    new Date(2022, 3, 1),
     new Date(2022, 12, 25)
   ]);
-  const startDate = value[0] ? value[0].toLocaleDateString("en-US") : ``
-  const endDate = value[1] ? value[1].toLocaleDateString("en-US") : ``
+  let startDate = value[0] ? value[0].toLocaleDateString("en-US") : ``
+  let endDate = value[1] ? value[1].toLocaleDateString("en-US") : ``
+  console.log(value[0])
 
 
   return (
@@ -57,8 +58,10 @@ function App() {
             hidden={!opened}
             width={{ sm: 200, lg: 200 }}
             sx={(theme) => ({
-              backgroundImage: theme.fn.gradient({ from: 'cyan', to: 'violet',
-              deg: 190 }),
+              backgroundImage: theme.fn.gradient({
+                from: 'cyan', to: 'violet',
+                deg: 190
+              }),
               color: theme.white,
             })
             } >
@@ -70,15 +73,15 @@ function App() {
             </Navbar.Section>
             <Navbar.Section grow mt='md'>
               <NavLink color='theme.white' label="Overview"
-              icon={<IconCalendarTime size={24} stroke={2} />} />
+                icon={<IconCalendarTime size={24} stroke={2} />} />
               <NavLink color='blue.2' label="Software"
-              icon={<IconCalendarTime size={24} stroke={2} />} />
+                icon={<IconCalendarTime size={24} stroke={2} />} />
               <NavLink color='blue.2' label="Computer Usage"
-              icon={<IconCalendarTime size={24} stroke={2} />} />
+                icon={<IconCalendarTime size={24} stroke={2} />} />
               <NavLink color='blue.2' label="Upload Data"
-              icon={<IconCalendarTime size={24} stroke={2} />} />
+                icon={<IconCalendarTime size={24} stroke={2} />} />
               <NavLink color='blue.2' label="Help"
-              icon={<IconCalendarTime size={24} stroke={2} />} />
+                icon={<IconCalendarTime size={24} stroke={2} />} />
             </Navbar.Section>
             <Navbar.Section>
               Footer
@@ -111,18 +114,18 @@ function App() {
               <Title order={1}>DLL Usage Stats: {startDate} - {endDate}</Title>
             </Grid.Col>
             <Grid.Col xs={12} lg={4} p='sm'>
-            <DateRangePicker
-              pb='xl'
-              placeholder='Pick date range'
-              value={value}
-              onChange={setValue}
-              firstDayOfWeek="sunday" 
-            />
+              <DateRangePicker
+                pb='xl'
+                placeholder='Pick date range'
+                value={value}
+                onChange={setValue}
+                firstDayOfWeek="sunday"
+              />
             </Grid.Col>
             <Grid.Col xs={12} lg={8}>
               <Grid gutter='lg'>
                 <Grid.Col xs={12} md={6}>
-                  <UniqueUsers />
+                  <UniqueUsers startDate={value[0]} endDate={value[1]} />
                 </Grid.Col>
                 <Grid.Col sm={12} md={6}>
                   <MostUsedProgram />

@@ -1,2 +1,8 @@
 Finder
 Preview
+Screensaver
+ScreenSaverEngine
+System Preferences
+SecurityAgent
+loginwindow
+UserNotificationCenter
