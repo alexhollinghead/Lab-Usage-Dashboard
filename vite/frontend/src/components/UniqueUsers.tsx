@@ -6,25 +6,26 @@ function UniqueUsers({ date }) {
     const [uniqueUsers, setUniqueUsers] = useState();
 
     useEffect(() => {
-        if(date[0] && date[1]) {        
-        let dateStart = Math.floor(date[0].getTime() / 1000)
-        let dateEnd = Math.floor(date[1].getTime() / 1000)
-        fetch(
-            'http://127.0.0.1:5000/usage?' + new URLSearchParams([
-                ['type', 'unique_users'],
-                ['start', dateStart],
-                ['end', dateEnd]
-            ])
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                setUniqueUsers(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });}
+        if (date[0] && date[1]) {
+            let dateStart = Math.floor(date[0].getTime() / 1000)
+            let dateEnd = Math.floor(date[1].getTime() / 1000)
+            fetch(
+                'http://127.0.0.1:5000/usage?' + new URLSearchParams([
+                    ['type', 'unique_users'],
+                    ['start', dateStart],
+                    ['end', dateEnd]
+                ])
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    setUniqueUsers(data);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
 
-    },[date]);
+    }, [date]);
 
     return (
         <Card shadow='None' p='lg' c='white' withBorder radius='md'
