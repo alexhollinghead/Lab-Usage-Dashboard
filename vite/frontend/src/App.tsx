@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AppShell,
   Burger,
@@ -36,9 +36,9 @@ function App() {
     new Date(2022, 3, 1),
     new Date(2022, 12, 25)
   ]);
-  let startDate = value[0] ? value[0].toLocaleDateString("en-US") : ``
-  let endDate = value[1] ? value[1].toLocaleDateString("en-US") : ``
-  console.log(value[0])
+
+  let start = value[0] ? value[0].toLocaleDateString("en-US") : ``
+  let end = value[1] ? value[1].toLocaleDateString("en-US") : ``
 
 
   return (
@@ -111,7 +111,7 @@ function App() {
         <Container size='xl' p='xl'>
           <Grid gutter='xl'>
             <Grid.Col xs={12} lg={8}>
-              <Title order={1}>DLL Usage Stats: {startDate} - {endDate}</Title>
+              <Title order={1}>DLL Usage Stats: {start} - {end}</Title>
             </Grid.Col>
             <Grid.Col xs={12} lg={4} p='sm'>
               <DateRangePicker
@@ -125,7 +125,7 @@ function App() {
             <Grid.Col xs={12} lg={8}>
               <Grid gutter='lg'>
                 <Grid.Col xs={12} md={6}>
-                  <UniqueUsers startDate={value[0]} endDate={value[1]} />
+                  <UniqueUsers date={value} />
                 </Grid.Col>
                 <Grid.Col sm={12} md={6}>
                   <MostUsedProgram />

@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { Card, Text, ThemeIcon } from '@mantine/core'
 import { IconUser } from '@tabler/icons';
 
-function UniqueUsers({ startDate, endDate }) {
+function UniqueUsers({ date }) {
     const [uniqueUsers, setUniqueUsers] = useState();
-    console.log("Start date" + startDate)
-    let dateStart = Math.floor(startDate.getTime() / 1000)
-    let dateEnd = Math.floor(endDate.getTime() / 1000)
 
     useEffect(() => {
+        if(date[0] && date[1]) {        
+        let dateStart = Math.floor(date[0].getTime() / 1000)
+        let dateEnd = Math.floor(date[1].getTime() / 1000)
         fetch(
             'http://127.0.0.1:5000/usage?' + new URLSearchParams([
                 ['type', 'unique_users'],
@@ -22,8 +22,9 @@ function UniqueUsers({ startDate, endDate }) {
             })
             .catch((err) => {
                 console.log(err.message);
-            });
-    });
+            });}
+
+    },[date]);
 
     return (
         <Card shadow='None' p='lg' c='white' withBorder radius='md'
