@@ -38,7 +38,7 @@ export default function Upload() {
                 onDrop={() => { }}
                 className={classes.dropzone}
                 radius="md"
-                accept={[MIME_TYPES.pdf]}
+                accept={[MIME_TYPES.csv]}
                 maxSize={30 * 1024 ** 2}
             >
                 <div style={{ pointerEvents: 'none' }}>
@@ -60,12 +60,12 @@ export default function Upload() {
 
                     <Text align="center" weight={700} size="lg" mt="xl">
                         <Dropzone.Accept>Drop files here</Dropzone.Accept>
-                        <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-                        <Dropzone.Idle>Upload resume</Dropzone.Idle>
+                        <Dropzone.Reject>CSV Files</Dropzone.Reject>
+                        <Dropzone.Idle>Upload Data</Dropzone.Idle>
                     </Text>
                     <Text align="center" size="sm" mt="xs" color="dimmed">
-                        Drag&apos;n&apos;drop files here to upload. We can accept only <i>.pdf</i> files that
-                        are less than 30mb in size.
+                        Drag&apos;n&apos;drop files here to upload. We can accept only <i>.csv</i> files that
+                        follow the appropriate structure.
                     </Text>
                 </div>
             </Dropzone>

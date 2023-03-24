@@ -10,7 +10,7 @@ function UniqueUsers({ date }) {
             let dateStart = Math.floor(date[0].getTime() / 1000)
             let dateEnd = Math.floor(date[1].getTime() / 1000)
             fetch(
-                'http://127.0.0.1:5000/usage?' + new URLSearchParams([
+                'usage?' + new URLSearchParams([
                     ['type', 'unique_users'],
                     ['start', dateStart],
                     ['end', dateEnd]

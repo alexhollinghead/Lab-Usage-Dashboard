@@ -5,7 +5,6 @@ import Chart from "react-apexcharts";
 class MonthlyTrend extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             options: {
                 chart: {
