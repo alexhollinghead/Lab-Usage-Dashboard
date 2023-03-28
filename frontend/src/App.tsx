@@ -49,7 +49,7 @@ function App() {
           <Container size='lg' p='xl'>
             <Routes>
               <Route path="/" element={<FrontPage date={date} />} />
-              <Route path="/software" element={<SoftwareUsage />} />
+              <Route path="/software" element={<SoftwareUsage date={date}/>} />
               <Route path="/computers" element={<ComputerUsage />} />
               <Route path="/upload-data" element={<Upload />} />
               <Route path="/help" element={<Help />} />

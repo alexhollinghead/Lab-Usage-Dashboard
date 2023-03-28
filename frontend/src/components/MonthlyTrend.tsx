@@ -31,19 +31,20 @@ class MonthlyTrend extends Component {
     render() {
         return (
             <Card shadow='None' p='lg' withBorder radius='md'>
-            <Title order={2} mb='xl'>Users Per Month</Title>
-            <div className="app" >
-                <div className="row" >
-                    <div className="mixed-chart" >
-                        <Chart
-                            options={this.state.options}
-                            series={this.state.series}
-                            type="line"
-                            height="540px"
-                        />
+                <Title order={2} mb='xl'>Users Per Month</Title>
+                <div className="app" >
+                    <div className="row" >
+                        <div className="mixed-chart" >
+                            <Chart
+                                options={this.state.options}
+                                series={this.state.series}
+                                type="line"
+                                height="540px"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div></Card>
+            </Card>
         );
     }
 }

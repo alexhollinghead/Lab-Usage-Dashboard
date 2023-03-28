@@ -29,7 +29,7 @@ def upload_data():
 def data():
     start_date = request.args['start']
     end_date = request.args['end']
-    return methods.set_dataframe(start_date, end_date).to_json(), {
+    return methods.set_dataframe(int(start_date), int(end_date)).to_json(), {
         'Content-Type': 'application/json'}
 
 # Usage routes

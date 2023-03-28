@@ -23,10 +23,10 @@ def set_dataframe(start_date, end_date):
                       (dataset['date'] <= end_date)]
 
     # Consolidate apps used by a user on the same machine in the same day
-    dataset['day'] = dataset['date'].dt.date
-    dataset = dataset.groupby(['user_name', 'computer', 'day'],
-                              as_index=False).agg(
-        {'process': lambda x: pd.unique(list(x)).tolist()})
+    # dataset['day'] = dataset['date'].dt.date
+    # dataset = dataset.groupby(['user_name', 'computer', 'day'],
+    #                           as_index=False).agg(
+    #     {'process': lambda x: pd.unique(list(x)).tolist()})
 
     return dataset
 
@@ -116,7 +116,7 @@ def upload_app_filter(app_file):
         dbconfig.filter_add('app_filter', data_series=apps, col_label='app')
         return 'Success'
     except:
-        "Upload failed"
+        return "Upload failed"
 
 
 def usage(data_type, start_date, end_date):
@@ -135,12 +135,9 @@ def usage(data_type, start_date, end_date):
     # Return number of application sessions
     # TODO: refactor to use an un-aggregated dataframe
     if data_type == 'apps':
-        # data_view = [None]
-        #     app_frequency = dataset['process'].value_counts()
-        app_frequency = dataset['process']
-        return app_frequency.to_json()
-    #     data_view = app_frequency.to_json(
-    #     ), {'Content-Type': 'application/json'}
+        app_frequency = dataset['process'].value_counts()
+        return app_frequency.to_json(
+        ), {'Content-Type': 'application/json'}
 
     # Return total number of user sessions
     elif data_type == 'users':

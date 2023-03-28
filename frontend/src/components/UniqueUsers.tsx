@@ -16,13 +16,13 @@ function UniqueUsers({ date }) {
                     ['end', dateEnd]
                 ])
             )
-                .then((response) => response.json())
-                .then((data) => {
-                    setUniqueUsers(data);
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+            .then((response) => response.json())
+            .then((data) => {
+                setUniqueUsers(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
         }
 
     }, [date]);
