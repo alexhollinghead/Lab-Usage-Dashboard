@@ -24,7 +24,6 @@ function UniqueUsers({ date }) {
                 console.log(err.message);
             });
         }
-
     }, [date]);
 
     return (
