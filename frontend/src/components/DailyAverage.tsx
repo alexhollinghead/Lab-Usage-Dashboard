@@ -1,7 +1,8 @@
 import { Component } from 'react';
+import { Card, Title } from '@mantine/core'
 import Chart from "react-apexcharts";
 
-class MonthlyTrend extends Component {
+class DailyAverage extends Component {
     constructor(props) {
         super(props);
 
@@ -13,37 +14,37 @@ class MonthlyTrend extends Component {
                         show: false,
                     },
                 },
-                stroke: {
-                    curve: 'smooth',
-                },
                 xaxis: {
-                    categories: ["Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+                    categories: ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"]
                 }
             },
             series: [
                 {
                     name: "Users",
-                    data: [30, 40, 45, 50, 49, 60, 50]
+                    data: [45, 40, 45, 50, 49, 20, 10]
                 }
             ]
         };
     }
     render() {
         return (
+            <Card shadow='None' p='lg' withBorder radius='md'>
+                    <Title order={2}>Average Users by Day</Title>
             <div className="app">
                 <div className="row">
                     <div className="mixed-chart">
                         <Chart
                             options={this.state.options}
                             series={this.state.series}
-                            type="line"
-                            height="540px"
+                            type="bar"
+                            align="right"
                         />
                     </div>
                 </div>
             </div>
+            </Card>
         );
     }
 }
 
-export default MonthlyTrend
+export default DailyAverage

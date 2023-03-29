@@ -23,10 +23,10 @@ def set_dataframe(start_date, end_date):
                       (dataset['date'] <= end_date)]
 
     # Consolidate apps used by a user on the same machine in the same day
-    dataset['day'] = dataset['date'].dt.date
-    dataset = dataset.groupby(['user_name', 'computer', 'day'],
-                              as_index=False).agg(
-        {'process': lambda x: list(x)})
+    # dataset['day'] = dataset['date'].dt.date
+    # dataset = dataset.groupby(['user_name', 'computer', 'day'],
+    #                           as_index=False).agg(
+    #     {'process': lambda x: pd.unique(list(x)).tolist()})
 
     return dataset
 
@@ -116,7 +116,7 @@ def upload_app_filter(app_file):
         dbconfig.filter_add('app_filter', data_series=apps, col_label='app')
         return 'Success'
     except:
-        "Upload failed"
+        return "Upload failed"
 
 
 def usage(data_type, start_date, end_date):
@@ -128,23 +128,26 @@ def usage(data_type, start_date, end_date):
         'app_filter', con=dbconfig.engine.connect())
     filtered_users = pd.read_sql_table(
         'user_filter', con=dbconfig.engine.connect())
+
+    # TODO: Update filtered_apps to work on new list-based app column
     dataset = dataset[~dataset.process.isin(filtered_apps.app)]
     dataset = dataset[~dataset.user_name.isin(filtered_users.user)]
-
     # Return number of application sessions
     # TODO: refactor to use an un-aggregated dataframe
     if data_type == 'apps':
-        data_view = [None]
-    #     app_frequency = dataset['process'].value_counts()
-    #     return app_frequency.to_json()
-    #     data_view = app_frequency.to_json(
-    #     ), {'Content-Type': 'application/json'}
+        app_frequency = dataset['process'].value_counts()
+        return app_frequency.to_json(
+        ), {'Content-Type': 'application/json'}
 
     # Return total number of user sessions
     elif data_type == 'users':
         user_frequency = dataset['user_name'].value_counts()
         data_view = user_frequency.to_json(
         ), {'Content-Type': 'application/json'}
+
+    elif data_type == 'monthly_users':
+        # Collect counts of sessions for each unique month+year in dataset
+        pass
 
     # Return number of unique users
     elif data_type == 'unique_users':
