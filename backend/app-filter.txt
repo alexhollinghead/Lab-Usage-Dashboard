@@ -6,3 +6,9 @@ System Preferences
 SecurityAgent
 loginwindow
 UserNotificationCenter
+Microsoft AutoUpdate
+dvaaudiofilterscan
+AirPlayUIAgent
+MunkiStatus
+MobileDeviceUpdater
+CoreServicesUIAgent
