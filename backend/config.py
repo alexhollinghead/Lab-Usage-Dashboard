@@ -2,26 +2,23 @@ import os.path
 
 
 class BaseConfig:
-    FLASK_APP = 'wsgi.py'
-
-    path = os.path.abspath(os.getcwd())
-    db_uri = f'sqlite:////{path}/database.db'
+    FLASK_APP = "wsgi.py"
 
     # Databse configuration
-    SQLALCHEMY_DATABASE_URI = db_uri
+    path = os.path.abspath(os.getcwd())
+    SQLALCHEMY_DATABASE_URI = f"sqlite:////{path}/database.db"
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevConfig(BaseConfig):
-    # Flask configuration
     TESTING = True
     DEBUG = True
-    FLASK_DEBUG = True
 
 
 class ProdConfig(BaseConfig):
-    pass
+    DEBUG = False
+    TESTING = False
 
 
 configs = {"development": DevConfig, "production": ProdConfig}

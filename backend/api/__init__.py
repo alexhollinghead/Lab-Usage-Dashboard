@@ -1,33 +1,30 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 import os.path
-import sqlite3
-from config import configs
+from flask import Flask
 from flask_cors import CORS
+from config import configs
+from .models import db, create_database, AppFilter, UserFilter
+from .routes import main as main_blueprint
 
-# Globally acessible libraries
-db = SQLAlchemy()
 
+def create_app():
+    """Initialize the core application"""
+    app = Flask(__name__)
 
-def init_app():
-    '''Initialize the core application'''
-    app = Flask(__name__, instance_relative_config=False)
+    config_name = os.environ.get("APP_CONFIG", default="development")
+    app.config.from_object(configs[config_name])
 
-    app.config.from_object(configs["development"])
     CORS(app)
     db.init_app(app)
 
-    # Create app database if it does not exist already
-    if not os.path.exists('databse.db'):
-        try:
-            conn = sqlite3.connect('database.db')
-            print('Database formed')
-        except Exception as error:
-            return error
+    if not os.path.exists("database.db"):
+        create_database(app)
 
-    with app.app_context():
-        # Include routes
-        from . import views
-        from . import methods
+    app.register_blueprint(main_blueprint)
 
-        return app
+    # Reset DB tables
+    # with app.app_context():
+    #     AppFilter.__table__.drop(db.engine)
+    #     UserFilter.__table__.drop(db.engine)
+    #     db.create_all()
+
+    return app

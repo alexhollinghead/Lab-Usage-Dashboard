@@ -12,3 +12,9 @@ AirPlayUIAgent
 MunkiStatus
 MobileDeviceUpdater
 CoreServicesUIAgent
+Managed Software Center
+dvaaudiofilterscan
+Plugin Manager
+Captive Network Assistant
+System Information
+Setup Assistant

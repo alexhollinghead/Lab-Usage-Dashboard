@@ -1,2 +1,3 @@
-FLASK_APP=wsgi.py
-FLASK_DEBUG=True
+FLASK_APP = "wsgi.py"
+APP_CONFIG = "development"
+FLASK_DEBUG = True

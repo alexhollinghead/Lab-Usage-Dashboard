@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.types import Integer, Text, DateTime
+from sqlalchemy.types import Integer, String, Text, DateTime
 from config import BaseConfig
 
 database_uri = BaseConfig.SQLALCHEMY_DATABASE_URI
@@ -8,7 +8,7 @@ engine = create_engine(database_uri, echo=True)
 
 def put_data(usage_df):
     """
-    Add data to an SQL table called 'usage'. The columns of the table are
+    Add data to an DB table called 'usage'. The columns of the table are
     "computer", "process", "date", "frontmost_time", "user_name" and
     "total_runitme". The data types for each column are Text, Text, DateTime,
     Integer, Text and Integer respectively.
@@ -18,18 +18,18 @@ def put_data(usage_df):
         A DataFrame of computer usage data
     """
     usage_df.to_sql(
-        'usage',
+        "usage",
         engine,
-        if_exists='append',
+        if_exists="append",
         index=False,
         dtype={
-            "computer": Text,
-            "process": Text,
+            "computer": String,
+            "process": String,
             "date": DateTime,
             "frontmost_time": Integer,
-            "user_name": Text,
+            "user_name": String,
             "total_runtime": Integer,
-        }
+        },
     )
 
 
@@ -48,9 +48,9 @@ def filter_add(filter_type, data_series, col_label):
     data_series.to_sql(
         filter_type,
         engine,
-        if_exists='append',
+        if_exists="append",
         index=False,
         dtype={
             col_label: Text,
-        }
+        },
     )
